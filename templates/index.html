@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Website</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <script src="https://unpkg.com/vanilla-picker@2"></script>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+</head>
+
+<body>
+    <main>
+        <div id="parent">Click me</div>
+
+
+        <script>
+            // Create a new Picker instance and set the parent element.
+            // By default, the color picker is a popup which appears when you click the parent.
+            var parent = document.querySelector('#parent');
+            var picker = new Picker(parent);
+
+            // You can do what you want with the chosen color using two callbacks: onChange and onDone.
+            picker.onChange = function (color) {
+                parent.style.background = color.rgbaString;
+                var server_data = { "r": color.rgba[0], "g": color.rgba[1], "b": color.rgba[2], "a": color.rgba[3] }
+                $.ajax({
+                    type: "POST",
+                    url: "/set_color",
+                    data: JSON.stringify(server_data),
+                    contentType: "application/json",
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log("Result:");
+                        console.log(result);
+                    }
+                });
+            };
+
+            // onDone is similar to onChange, but only called when you click 'Ok'.
+        </script>
+    </main>
+</body>
+
+
+
+
+</html>
